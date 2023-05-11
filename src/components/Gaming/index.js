@@ -1,21 +1,18 @@
 import {Component} from 'react'
-import Cookies from 'js-cookie'
-
 import Loader from 'react-loader-spinner'
-import {BiSearch} from 'react-icons/bi'
-import HomeVideoCard from '../HomeVideoCard'
-
+import Cookies from 'js-cookie'
+import {SiYoutubegaming} from 'react-icons/si'
+import GamingVideoCart from '../GamingVideoCart'
 import Header from '../Header'
 import SlideBar from '../SlideBar'
-
 import {
-  HomeContainer,
-  HomeContent,
+  GamingContainer,
+  GamingContent,
   LoaderContainer,
-  SearchInputContainer,
-  SearchInput,
-  SearchBtn,
-  VideoList,
+  GamingBanner,
+  BannerLogoContainer,
+  BannerHeading,
+  GamingVideoList,
 } from './styledComponents'
 
 const apiStatusConstant = {
@@ -24,21 +21,18 @@ const apiStatusConstant = {
   failure: 'FAILURE',
   inProgress: 'IN_PROGRESS',
 }
-console.log(apiStatusConstant)
-class Home extends Component {
-  state = {
-    videosList: [],
-    apiStatus: apiStatusConstant.initial,
-  }
+
+class Gaming extends Component {
+  state = {apiStatus: apiStatusConstant.initial, gameVideoList: []}
 
   componentDidMount() {
-    this.getAllVideos()
+    this.getAllGameVideos()
   }
 
-  getAllVideos = async () => {
+  getAllGameVideos = async () => {
     this.setState({apiStatus: apiStatusConstant.inProgress})
     const jwtToken = Cookies.get('jwt_token')
-    const url = ' https://apis.ccbp.in/videos/all?search='
+    const url = 'https://apis.ccbp.in/videos/gaming'
     const options = {
       method: 'GET',
       headers: {
@@ -50,15 +44,12 @@ class Home extends Component {
       const responseData = await response.json()
       const updatedData = responseData.videos.map(eachItem => ({
         id: eachItem.id,
-        publishedAt: eachItem.published_at,
         thumbnailUrl: eachItem.thumbnail_url,
         title: eachItem.title,
         viewCount: eachItem.view_count,
-        name: eachItem.channel.name,
-        profileImageUrl: eachItem.channel.profile_image_url,
       }))
       this.setState({
-        videosList: updatedData,
+        gameVideoList: updatedData,
         apiStatus: apiStatusConstant.success,
       })
     } else {
@@ -72,32 +63,33 @@ class Home extends Component {
     </LoaderContainer>
   )
 
-  renderVideosView = () => {
-    const {videosList} = this.state
+  renderGamingView = () => {
+    const {gameVideoList} = this.state
+
     return (
       <>
-        <SearchInputContainer>
-          <SearchInput type="search" placeholder="Search" />
-          <SearchBtn>
-            <BiSearch size="20" />
-          </SearchBtn>
-        </SearchInputContainer>
-        <VideoList>
-          {videosList.map(eachItem => (
-            <HomeVideoCard key={eachItem.id} videosDetails={eachItem} />
+        <GamingBanner>
+          <BannerLogoContainer>
+            <SiYoutubegaming size={35} color="#ff0000" />
+          </BannerLogoContainer>
+          <BannerHeading>Gaming</BannerHeading>
+        </GamingBanner>
+        <GamingVideoList>
+          {gameVideoList.map(eachItem => (
+            <GamingVideoCart gamingVideoDetails={eachItem} key={eachItem.id} />
           ))}
-        </VideoList>
+        </GamingVideoList>
       </>
     )
   }
 
-  renderAllVideos = () => {
+  renderAllGamingVideos = () => {
     const {apiStatus} = this.state
     switch (apiStatus) {
       case apiStatusConstant.inProgress:
         return this.renderLoaderView()
       case apiStatusConstant.success:
-        return this.renderVideosView()
+        return this.renderGamingView()
       case apiStatusConstant.failure:
         return <h1>failure</h1>
       default:
@@ -106,18 +98,16 @@ class Home extends Component {
   }
 
   render() {
-    const {videosList} = this.state
-    console.log(videosList)
     return (
       <>
         <Header />
-        <HomeContainer>
+        <GamingContainer>
           <SlideBar />
-          <HomeContent>{this.renderAllVideos()}</HomeContent>
-        </HomeContainer>
+          <GamingContent>{this.renderAllGamingVideos()}</GamingContent>
+        </GamingContainer>
       </>
     )
   }
 }
 
-export default Home
+export default Gaming

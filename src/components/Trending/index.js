@@ -1,21 +1,19 @@
 import {Component} from 'react'
 import Cookies from 'js-cookie'
-
 import Loader from 'react-loader-spinner'
-import {BiSearch} from 'react-icons/bi'
-import HomeVideoCard from '../HomeVideoCard'
-
+import {HiFire} from 'react-icons/hi'
+import TrendingVideoCard from '../TrendingVideoCard'
 import Header from '../Header'
 import SlideBar from '../SlideBar'
 
 import {
-  HomeContainer,
-  HomeContent,
+  TrendingContainer,
+  TrendingContent,
   LoaderContainer,
-  SearchInputContainer,
-  SearchInput,
-  SearchBtn,
-  VideoList,
+  TrendingBanner,
+  BannerLogoContainer,
+  BannerHeading,
+  TrendingVideoList,
 } from './styledComponents'
 
 const apiStatusConstant = {
@@ -24,12 +22,9 @@ const apiStatusConstant = {
   failure: 'FAILURE',
   inProgress: 'IN_PROGRESS',
 }
-console.log(apiStatusConstant)
-class Home extends Component {
-  state = {
-    videosList: [],
-    apiStatus: apiStatusConstant.initial,
-  }
+
+class Trending extends Component {
+  state = {apiStatus: apiStatusConstant.initial, TrendingvideoList: []}
 
   componentDidMount() {
     this.getAllVideos()
@@ -38,7 +33,7 @@ class Home extends Component {
   getAllVideos = async () => {
     this.setState({apiStatus: apiStatusConstant.inProgress})
     const jwtToken = Cookies.get('jwt_token')
-    const url = ' https://apis.ccbp.in/videos/all?search='
+    const url = 'https://apis.ccbp.in/videos/trending'
     const options = {
       method: 'GET',
       headers: {
@@ -58,7 +53,7 @@ class Home extends Component {
         profileImageUrl: eachItem.channel.profile_image_url,
       }))
       this.setState({
-        videosList: updatedData,
+        TrendingvideoList: updatedData,
         apiStatus: apiStatusConstant.success,
       })
     } else {
@@ -72,32 +67,36 @@ class Home extends Component {
     </LoaderContainer>
   )
 
-  renderVideosView = () => {
-    const {videosList} = this.state
+  renderTrendingView = () => {
+    const {TrendingvideoList} = this.state
+
     return (
       <>
-        <SearchInputContainer>
-          <SearchInput type="search" placeholder="Search" />
-          <SearchBtn>
-            <BiSearch size="20" />
-          </SearchBtn>
-        </SearchInputContainer>
-        <VideoList>
-          {videosList.map(eachItem => (
-            <HomeVideoCard key={eachItem.id} videosDetails={eachItem} />
+        <TrendingBanner>
+          <BannerLogoContainer>
+            <HiFire size={35} color="#ff0000" />
+          </BannerLogoContainer>
+          <BannerHeading>Trending</BannerHeading>
+        </TrendingBanner>
+        <TrendingVideoList>
+          {TrendingvideoList.map(eachItem => (
+            <TrendingVideoCard
+              key={eachItem.id}
+              trendingVideoDetails={eachItem}
+            />
           ))}
-        </VideoList>
+        </TrendingVideoList>
       </>
     )
   }
 
-  renderAllVideos = () => {
+  renderAllTrendingVideos = () => {
     const {apiStatus} = this.state
     switch (apiStatus) {
       case apiStatusConstant.inProgress:
         return this.renderLoaderView()
       case apiStatusConstant.success:
-        return this.renderVideosView()
+        return this.renderTrendingView()
       case apiStatusConstant.failure:
         return <h1>failure</h1>
       default:
@@ -106,18 +105,16 @@ class Home extends Component {
   }
 
   render() {
-    const {videosList} = this.state
-    console.log(videosList)
     return (
       <>
         <Header />
-        <HomeContainer>
+        <TrendingContainer>
           <SlideBar />
-          <HomeContent>{this.renderAllVideos()}</HomeContent>
-        </HomeContainer>
+          <TrendingContent>{this.renderAllTrendingVideos()}</TrendingContent>
+        </TrendingContainer>
       </>
     )
   }
 }
 
-export default Home
+export default Trending

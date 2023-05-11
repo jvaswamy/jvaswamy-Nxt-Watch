@@ -2,6 +2,10 @@ import {Component} from 'react'
 import {Route, Switch} from 'react-router-dom'
 import LoginForm from './components/LoginForm'
 import Home from './components/Home'
+import Trending from './components/Trending'
+import VideoItemDetails from './components/VideoItemDetails'
+import Gaming from './components/Gaming'
+import SavedVideos from './components/SavedVideos'
 import ProtectedRoute from './components/ProtectedRoute'
 import ThemeContext from './context/ThemeContext'
 import './App.css'
@@ -25,6 +29,14 @@ class App extends Component {
         <Switch>
           <Route exact path="/login" component={LoginForm} />
           <ProtectedRoute exact path="/" component={Home} />
+          <ProtectedRoute exact path="/trending" component={Trending} />
+          <ProtectedRoute exact path="/gaming" component={Gaming} />
+          <ProtectedRoute exact path="/saved-videos" component={SavedVideos} />
+          <ProtectedRoute
+            exaxt
+            path="/videos/:id"
+            component={VideoItemDetails}
+          />
         </Switch>
       </ThemeContext.Provider>
     )
