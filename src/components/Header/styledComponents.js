@@ -45,34 +45,48 @@ export const MoonBtn = styled.button`
 // popup section
 
 export const ModelContainer = styled.div`
-  background-color: #181818;
-  width: 300px;
-  padding: 20px 9px 20px 12px;
+  background-color: ${props => (props.theme === true ? '#181818' : '#ffffff')};
+  width: 400px;
+  height: 200px;
+  padding: 20px 10px 20px 10px;
   border-radius: 10px;
+  @media screen and (max-width: 767px) {
+    width: 300px;
+    height: 250px;
+  }
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `
 export const ModelHeading = styled.p`
-  font-size: 16px;
-  color: #ffffff;
+  font-size: 22px;
+  color: ${props => (props.theme === true ? '#ffffff' : '#1e293b')};
   margin-top: 0px;
+`
+export const ModelButtonContainer = styled.div`
+  display: flex;
 `
 export const ModelCancelBtn = styled.button`
   font-family: 'Roboto';
   font-weight: 600;
-  font-size: 10px;
+  font-size: 16px;
   padding: 8px 16px;
-  color: #ffffff;
+  color: ${props => (props.theme === true ? '#ffffff' : 'gray')};
   background-color: transparent;
-  border: 1px solid #ffffff;
+  border: 1px solid ${props => (props.theme === true ? '#ffffff' : 'gray')};
   border-radius: 4px;
   margin-left: 14px;
   cursor: pointer;
   outline: none;
+  width: 100px;
+  height: 40px;
 `
 export const ModelConfirmBtn = styled.button`
   font-family: 'Roboto';
   font-weight: 600;
-  font-size: 10px;
+  font-size: 16px;
   padding: 8px 16px;
   color: #ffffff;
   background-color: #0967d2;
@@ -81,6 +95,8 @@ export const ModelConfirmBtn = styled.button`
   margin-left: 14px;
   cursor: pointer;
   outline: none;
+  width: 100px;
+  height: 40px;
 `
 // destop section
 

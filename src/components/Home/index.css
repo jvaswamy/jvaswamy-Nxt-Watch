@@ -1,4 +1,8 @@
 .link-item {
   text-decoration: none;
+
   /* color: black; */
+}
+.popup-content {
+  display: flex;
 }
