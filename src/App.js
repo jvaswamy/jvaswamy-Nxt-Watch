@@ -8,40 +8,70 @@ import Gaming from './components/Gaming'
 import SavedVideos from './components/SavedVideos'
 import ProtectedRoute from './components/ProtectedRoute'
 import ThemeContext from './context/ThemeContext'
+import SaveItemContext from './context/SaveItemContext'
 import NotFound from './components/NotFound'
 import './App.css'
 
 class App extends Component {
-  state = {isDarkTheme: false}
+  state = {isDarkTheme: false, saveVideoList: []}
 
   toggleTheme = () => {
     this.setState(preState => ({isDarkTheme: !preState.isDarkTheme}))
   }
 
+  addVideoItem = videoItem => {
+    const {saveVideoList} = this.state
+    const findVideo = saveVideoList.find(
+      eachItem => eachItem.id === videoItem.id,
+    )
+    if (findVideo !== undefined) {
+      const filterVideos = saveVideoList.filter(
+        eachItem => eachItem.id !== videoItem.id,
+      )
+      this.setState({saveVideoList: filterVideos})
+    } else {
+      this.setState(preState => ({
+        saveVideoList: [...preState.saveVideoList, videoItem],
+      }))
+    }
+  }
+
   render() {
-    const {isDarkTheme} = this.state
+    const {isDarkTheme, saveVideoList} = this.state
+    console.log(saveVideoList)
     return (
-      <ThemeContext.Provider
+      <SaveItemContext.Provider
         value={{
-          isDarkTheme,
-          toggleTheme: this.toggleTheme,
+          saveVideoList,
+          addVideoItem: this.addVideoItem,
         }}
       >
-        <Switch>
-          <Route exact path="/login" component={LoginForm} />
-          <ProtectedRoute exact path="/" component={Home} />
-          <ProtectedRoute exact path="/trending" component={Trending} />
-          <ProtectedRoute exact path="/gaming" component={Gaming} />
-          <ProtectedRoute exact path="/saved-videos" component={SavedVideos} />
-          <ProtectedRoute
-            exaxt
-            path="/videos/:id"
-            component={VideoItemDetails}
-          />
-          <Route path="/not-found" component={NotFound} />
-          <Redirect to="not-found" />
-        </Switch>
-      </ThemeContext.Provider>
+        <ThemeContext.Provider
+          value={{
+            isDarkTheme,
+            toggleTheme: this.toggleTheme,
+          }}
+        >
+          <Switch>
+            <Route exact path="/login" component={LoginForm} />
+            <ProtectedRoute exact path="/" component={Home} />
+            <ProtectedRoute exact path="/trending" component={Trending} />
+            <ProtectedRoute exact path="/gaming" component={Gaming} />
+            <ProtectedRoute
+              exact
+              path="/saved-videos"
+              component={SavedVideos}
+            />
+            <ProtectedRoute
+              exaxt
+              path="/videos/:id"
+              component={VideoItemDetails}
+            />
+            <Route path="/not-found" component={NotFound} />
+            <Redirect to="not-found" />
+          </Switch>
+        </ThemeContext.Provider>
+      </SaveItemContext.Provider>
     )
   }
 }

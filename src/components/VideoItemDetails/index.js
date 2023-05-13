@@ -9,6 +9,8 @@ import {BiListPlus} from 'react-icons/bi'
 
 import Header from '../Header'
 import SlideBar from '../SlideBar'
+import ThemeContext from '../../context/ThemeContext'
+import SaveItemContext from '../../context/SaveItemContext'
 
 import {
   VideoItemDetailsContainer,
@@ -34,6 +36,11 @@ import {
   SubCont,
   Description,
   Description1,
+  FailureImg,
+  FalureViewContainer,
+  FailureTitle,
+  FailureDescription,
+  RetryButton,
 } from './styledComponents'
 
 const apiStatusConstant = {
@@ -49,9 +56,14 @@ class VideoItemDetails extends Component {
     videoDetails: {},
     isLike: false,
     isDisLike: false,
+    // isSave: false,
   }
 
   componentDidMount() {
+    this.getVideoDetails()
+  }
+
+  onRetry = () => {
     this.getVideoDetails()
   }
 
@@ -93,9 +105,21 @@ class VideoItemDetails extends Component {
   }
 
   renderLoaderView = () => (
-    <LoaderContainer className="loader-container" data-testid="loader">
-      <Loader type="ThreeDots" color="#ffffff" height="50" width="50" />
-    </LoaderContainer>
+    <ThemeContext.Consumer>
+      {value => {
+        const {isDarkTheme} = value
+        return (
+          <LoaderContainer className="loader-container" data-testid="loader">
+            <Loader
+              type="ThreeDots"
+              color={isDarkTheme ? '#00306e' : '#0f0f0f'}
+              height="50"
+              width="50"
+            />
+          </LoaderContainer>
+        )
+      }}
+    </ThemeContext.Consumer>
   )
 
   onLike = () => {
@@ -105,6 +129,45 @@ class VideoItemDetails extends Component {
   onDisLike = () => {
     this.setState(preState => ({isDisLike: !preState.isDisLike, isLike: false}))
   }
+
+  onClickSave = () => {
+    this.setState(preState => ({isSave: !preState.isSave}))
+  }
+  // <SaveItemContext.Consumer>
+  //   {value => {
+  //     const {addVideoItem} = value
+  //     const {videoDetails} = this.state
+  //     addVideoItem(videoDetails)
+
+  //   }}
+  // </SaveItemContext.Consumer>
+
+  renderFailureView = () => (
+    <ThemeContext.Consumer>
+      {value => {
+        const {isDarkTheme} = value
+        const showImage =
+          isDarkTheme === true
+            ? 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-dark-theme-img.png'
+            : 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-light-theme-img.png'
+        return (
+          <FalureViewContainer>
+            <FailureImg src={showImage} alt="failure view" />
+            <FailureTitle theme={isDarkTheme}>
+              Oops! Something Went Wrong
+            </FailureTitle>
+            <FailureDescription theme={isDarkTheme}>
+              We are having some trouble to complete your request.Please try
+              again.
+            </FailureDescription>
+            <RetryButton type="button" onClick={this.onRetry}>
+              Retry
+            </RetryButton>
+          </FalureViewContainer>
+        )
+      }}
+    </ThemeContext.Consumer>
+  )
 
   renderVideoItemView = () => {
     const {videoDetails, isLike, isDisLike} = this.state
@@ -117,6 +180,7 @@ class VideoItemDetails extends Component {
       name,
       subscriberCount,
       description,
+      id,
     } = videoDetails
     let postedAt = formatDistanceToNow(new Date(publishedAt))
     const postedAtString = postedAt.split(' ')
@@ -126,47 +190,75 @@ class VideoItemDetails extends Component {
     }
 
     return (
-      <VideoItemResponseContainer>
-        <ReactPlayer url={videoUrl} width="100%" />
-        <VideoItemContentContainer>
-          <VideoItemDescription>{title}</VideoItemDescription>
-          <VideoItemDetailsCart>
-            <ItemViewsDetailsContainer>
-              <ItemViews>{viewCount} views</ItemViews>
-              <BsDot />
-              <ItemTime>{postedAt} ago</ItemTime>
-            </ItemViewsDetailsContainer>
-            <ItemLikeAndSaveContainer>
-              <LikeButton type="button" onClick={this.onLike} isLike={isLike}>
-                <AiOutlineLike size={25} />
-                <Text>Like</Text>
-              </LikeButton>
-              <DisLikeButton
-                type="button"
-                onClick={this.onDisLike}
-                isDisLike={isDisLike}
-              >
-                <AiOutlineDislike size={25} />
-                <Text>DisLike</Text>
-              </DisLikeButton>
-              <SaveButton type="button">
-                <BiListPlus size={25} />
-                <Text>Save</Text>
-              </SaveButton>
-            </ItemLikeAndSaveContainer>
-          </VideoItemDetailsCart>
-          <Line />
-          <ItemProfileContainer>
-            <ItemProfileImg src={profileImageUrl} alt="channel logo" />
-            <ItemProfileContentContainer>
-              <Name>{name}</Name>
-              <SubCont>{subscriberCount} subscribers</SubCont>
-              <Description>{description}</Description>
-            </ItemProfileContentContainer>
-          </ItemProfileContainer>
-          <Description1>{description}</Description1>
-        </VideoItemContentContainer>
-      </VideoItemResponseContainer>
+      <ThemeContext.Consumer>
+        {value => {
+          const {isDarkTheme} = value
+          return (
+            <VideoItemResponseContainer>
+              <ReactPlayer url={videoUrl} width="100%" />
+              <VideoItemContentContainer>
+                <VideoItemDescription theme={isDarkTheme}>
+                  {title}
+                </VideoItemDescription>
+                <VideoItemDetailsCart>
+                  <ItemViewsDetailsContainer theme={isDarkTheme}>
+                    <ItemViews>{viewCount} views</ItemViews>
+                    <BsDot />
+                    <ItemTime>{postedAt} ago</ItemTime>
+                  </ItemViewsDetailsContainer>
+                  <ItemLikeAndSaveContainer>
+                    <LikeButton
+                      type="button"
+                      onClick={this.onLike}
+                      isLike={isLike}
+                    >
+                      <AiOutlineLike size={25} />
+                      <Text>Like</Text>
+                    </LikeButton>
+                    <DisLikeButton
+                      type="button"
+                      onClick={this.onDisLike}
+                      isDisLike={isDisLike}
+                    >
+                      <AiOutlineDislike size={25} />
+                      <Text>DisLike</Text>
+                    </DisLikeButton>
+                    <SaveItemContext.Consumer>
+                      {value1 => {
+                        const {addVideoItem, saveVideoList} = value1
+                        const findVideo = saveVideoList.find(
+                          eachItem => eachItem.id === id,
+                        )
+                        const isActive = findVideo !== undefined
+                        return (
+                          <SaveButton
+                            type="button"
+                            onClick={() => addVideoItem(videoDetails)}
+                            isSave={isActive}
+                          >
+                            <BiListPlus size={25} />
+                            <Text>Save</Text>
+                          </SaveButton>
+                        )
+                      }}
+                    </SaveItemContext.Consumer>
+                  </ItemLikeAndSaveContainer>
+                </VideoItemDetailsCart>
+                <Line />
+                <ItemProfileContainer>
+                  <ItemProfileImg src={profileImageUrl} alt="channel logo" />
+                  <ItemProfileContentContainer>
+                    <Name theme={isDarkTheme}>{name}</Name>
+                    <SubCont>{subscriberCount} subscribers</SubCont>
+                    <Description theme={isDarkTheme}>{description}</Description>
+                  </ItemProfileContentContainer>
+                </ItemProfileContainer>
+                <Description1 theme={isDarkTheme}>{description}</Description1>
+              </VideoItemContentContainer>
+            </VideoItemResponseContainer>
+          )
+        }}
+      </ThemeContext.Consumer>
     )
   }
 
@@ -178,7 +270,7 @@ class VideoItemDetails extends Component {
       case apiStatusConstant.success:
         return this.renderVideoItemView()
       case apiStatusConstant.failure:
-        return <h1>failure</h1>
+        return this.renderFailureView()
       default:
         return null
     }
@@ -186,15 +278,25 @@ class VideoItemDetails extends Component {
 
   render() {
     return (
-      <>
-        <Header />
-        <VideoItemDetailsContainer>
-          <SlideBar />
-          <VideoItemDetailsContent>
-            {this.renderAllVideoItemDetails()}
-          </VideoItemDetailsContent>
-        </VideoItemDetailsContainer>
-      </>
+      <ThemeContext.Consumer>
+        {value => {
+          const {isDarkTheme} = value
+          return (
+            <>
+              <Header />
+              <VideoItemDetailsContainer>
+                <SlideBar />
+                <VideoItemDetailsContent
+                  theme={isDarkTheme}
+                  data-testid="videoItemDetails"
+                >
+                  {this.renderAllVideoItemDetails()}
+                </VideoItemDetailsContent>
+              </VideoItemDetailsContainer>
+            </>
+          )
+        }}
+      </ThemeContext.Consumer>
     )
   }
 }

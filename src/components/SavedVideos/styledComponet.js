@@ -5,7 +5,8 @@ export const SavedVideosContainer = styled.div`
 `
 
 export const SavedVideosContent = styled.div`
-  background-color: green;
+  background-color: ${props => (props.theme === true ? '#0f0f0f' : '#f9f9f9')};
   width: 70%;
-  height: 50vh;
+  min-height: 100vh;
+  flex-grow: 1;
 `

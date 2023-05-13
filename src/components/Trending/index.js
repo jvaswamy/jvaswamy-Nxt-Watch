@@ -5,6 +5,7 @@ import {HiFire} from 'react-icons/hi'
 import TrendingVideoCard from '../TrendingVideoCard'
 import Header from '../Header'
 import SlideBar from '../SlideBar'
+import ThemeContext from '../../context/ThemeContext'
 
 import {
   TrendingContainer,
@@ -14,6 +15,11 @@ import {
   BannerLogoContainer,
   BannerHeading,
   TrendingVideoList,
+  FailureImg,
+  FalureViewContainer,
+  FailureTitle,
+  FailureDescription,
+  RetryButton,
 } from './styledComponents'
 
 const apiStatusConstant = {
@@ -27,6 +33,10 @@ class Trending extends Component {
   state = {apiStatus: apiStatusConstant.initial, TrendingvideoList: []}
 
   componentDidMount() {
+    this.getAllVideos()
+  }
+
+  onRetry = () => {
     this.getAllVideos()
   }
 
@@ -62,31 +72,80 @@ class Trending extends Component {
   }
 
   renderLoaderView = () => (
-    <LoaderContainer className="loader-container" data-testid="loader">
-      <Loader type="ThreeDots" color="#ffffff" height="50" width="50" />
-    </LoaderContainer>
+    <ThemeContext.Consumer>
+      {value => {
+        const {isDarkTheme} = value
+        return (
+          <LoaderContainer className="loader-container" data-testid="loader">
+            <Loader
+              type="ThreeDots"
+              color={isDarkTheme ? '#00306e' : '#0f0f0f'}
+              height="50"
+              width="50"
+            />
+          </LoaderContainer>
+        )
+      }}
+    </ThemeContext.Consumer>
+  )
+
+  renderFailureView = () => (
+    <ThemeContext.Consumer>
+      {value => {
+        const {isDarkTheme} = value
+        const showImage =
+          isDarkTheme === true
+            ? 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-dark-theme-img.png'
+            : 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-light-theme-img.png'
+        return (
+          <FalureViewContainer>
+            <FailureImg src={showImage} alt="failure view" />
+            <FailureTitle theme={isDarkTheme}>
+              Oops! Something Went Wrong
+            </FailureTitle>
+            <FailureDescription theme={isDarkTheme}>
+              We are having some trouble to complete your request.Please try
+              again.
+            </FailureDescription>
+            <RetryButton type="button" onClick={this.onRetry}>
+              Retry
+            </RetryButton>
+          </FalureViewContainer>
+        )
+      }}
+    </ThemeContext.Consumer>
   )
 
   renderTrendingView = () => {
     const {TrendingvideoList} = this.state
 
     return (
-      <>
-        <TrendingBanner>
-          <BannerLogoContainer>
-            <HiFire size={35} color="#ff0000" />
-          </BannerLogoContainer>
-          <BannerHeading>Trending</BannerHeading>
-        </TrendingBanner>
-        <TrendingVideoList>
-          {TrendingvideoList.map(eachItem => (
-            <TrendingVideoCard
-              key={eachItem.id}
-              trendingVideoDetails={eachItem}
-            />
-          ))}
-        </TrendingVideoList>
-      </>
+      <ThemeContext.Consumer>
+        {value => {
+          const {isDarkTheme} = value
+          return (
+            <>
+              <TrendingBanner theme={isDarkTheme} data-testid="banner">
+                {/* banner section */}
+                <BannerLogoContainer theme={isDarkTheme}>
+                  <HiFire size={35} color="#ff0000" />
+                </BannerLogoContainer>
+                <BannerHeading theme={isDarkTheme}>Trending</BannerHeading>
+              </TrendingBanner>
+
+              {/* banner section */}
+              <TrendingVideoList>
+                {TrendingvideoList.map(eachItem => (
+                  <TrendingVideoCard
+                    key={eachItem.id}
+                    trendingVideoDetails={eachItem}
+                  />
+                ))}
+              </TrendingVideoList>
+            </>
+          )
+        }}
+      </ThemeContext.Consumer>
     )
   }
 
@@ -98,7 +157,7 @@ class Trending extends Component {
       case apiStatusConstant.success:
         return this.renderTrendingView()
       case apiStatusConstant.failure:
-        return <h1>failure</h1>
+        return this.renderFailureView()
       default:
         return null
     }
@@ -106,13 +165,23 @@ class Trending extends Component {
 
   render() {
     return (
-      <>
-        <Header />
-        <TrendingContainer>
-          <SlideBar />
-          <TrendingContent>{this.renderAllTrendingVideos()}</TrendingContent>
-        </TrendingContainer>
-      </>
+      <ThemeContext.Consumer>
+        {value => {
+          const {isDarkTheme} = value
+
+          return (
+            <>
+              <Header />
+              <TrendingContainer>
+                <SlideBar />
+                <TrendingContent theme={isDarkTheme} data-testid="trending">
+                  {this.renderAllTrendingVideos()}
+                </TrendingContent>
+              </TrendingContainer>
+            </>
+          )
+        }}
+      </ThemeContext.Consumer>
     )
   }
 }

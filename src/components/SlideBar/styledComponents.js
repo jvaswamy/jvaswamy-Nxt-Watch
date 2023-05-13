@@ -6,7 +6,7 @@ export const SlideBarContainer = styled.div`
   width: 25%;
   max-width: 250px;
   display: flex;
-  background-color: ${props => (props.bgColor ? '#0f0f0f' : '#ffffff')};
+  background-color: ${props => (props.bgColor ? '#181818' : '#ffffff')};
   flex-direction: column;
   justify-content: space-between;
   @media screen and (max-width: 767px) {

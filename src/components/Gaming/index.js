@@ -5,6 +5,7 @@ import {SiYoutubegaming} from 'react-icons/si'
 import GamingVideoCart from '../GamingVideoCart'
 import Header from '../Header'
 import SlideBar from '../SlideBar'
+import ThemeContext from '../../context/ThemeContext'
 import {
   GamingContainer,
   GamingContent,
@@ -13,6 +14,11 @@ import {
   BannerLogoContainer,
   BannerHeading,
   GamingVideoList,
+  FailureImg,
+  FalureViewContainer,
+  FailureTitle,
+  FailureDescription,
+  RetryButton,
 } from './styledComponents'
 
 const apiStatusConstant = {
@@ -26,6 +32,10 @@ class Gaming extends Component {
   state = {apiStatus: apiStatusConstant.initial, gameVideoList: []}
 
   componentDidMount() {
+    this.getAllGameVideos()
+  }
+
+  onRetry = () => {
     this.getAllGameVideos()
   }
 
@@ -58,28 +68,77 @@ class Gaming extends Component {
   }
 
   renderLoaderView = () => (
-    <LoaderContainer className="loader-container" data-testid="loader">
-      <Loader type="ThreeDots" color="#ffffff" height="50" width="50" />
-    </LoaderContainer>
+    <ThemeContext.Consumer>
+      {value => {
+        const {isDarkTheme} = value
+        return (
+          <LoaderContainer className="loader-container" data-testid="loader">
+            <Loader
+              type="ThreeDots"
+              color={isDarkTheme ? '#00306e' : '#0f0f0f'}
+              height="50"
+              width="50"
+            />
+          </LoaderContainer>
+        )
+      }}
+    </ThemeContext.Consumer>
+  )
+
+  renderFailureView = () => (
+    <ThemeContext.Consumer>
+      {value => {
+        const {isDarkTheme} = value
+        const showImage =
+          isDarkTheme === true
+            ? 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-dark-theme-img.png'
+            : 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-light-theme-img.png'
+        return (
+          <FalureViewContainer>
+            <FailureImg src={showImage} alt="failure view" />
+            <FailureTitle theme={isDarkTheme}>
+              Oops! Something Went Wrong
+            </FailureTitle>
+            <FailureDescription theme={isDarkTheme}>
+              We are having some trouble to complete your request.Please try
+              again.
+            </FailureDescription>
+            <RetryButton type="button" onClick={this.onRetry}>
+              Retry
+            </RetryButton>
+          </FalureViewContainer>
+        )
+      }}
+    </ThemeContext.Consumer>
   )
 
   renderGamingView = () => {
     const {gameVideoList} = this.state
 
     return (
-      <>
-        <GamingBanner>
-          <BannerLogoContainer>
-            <SiYoutubegaming size={35} color="#ff0000" />
-          </BannerLogoContainer>
-          <BannerHeading>Gaming</BannerHeading>
-        </GamingBanner>
-        <GamingVideoList>
-          {gameVideoList.map(eachItem => (
-            <GamingVideoCart gamingVideoDetails={eachItem} key={eachItem.id} />
-          ))}
-        </GamingVideoList>
-      </>
+      <ThemeContext.Consumer>
+        {value => {
+          const {isDarkTheme} = value
+          return (
+            <>
+              <GamingBanner theme={isDarkTheme} data-testid="banner">
+                <BannerLogoContainer theme={isDarkTheme}>
+                  <SiYoutubegaming size={35} color="#ff0000" />
+                </BannerLogoContainer>
+                <BannerHeading theme={isDarkTheme}>Gaming</BannerHeading>
+              </GamingBanner>
+              <GamingVideoList>
+                {gameVideoList.map(eachItem => (
+                  <GamingVideoCart
+                    gamingVideoDetails={eachItem}
+                    key={eachItem.id}
+                  />
+                ))}
+              </GamingVideoList>
+            </>
+          )
+        }}
+      </ThemeContext.Consumer>
     )
   }
 
@@ -91,7 +150,7 @@ class Gaming extends Component {
       case apiStatusConstant.success:
         return this.renderGamingView()
       case apiStatusConstant.failure:
-        return <h1>failure</h1>
+        return this.renderFailureView()
       default:
         return null
     }
@@ -99,13 +158,22 @@ class Gaming extends Component {
 
   render() {
     return (
-      <>
-        <Header />
-        <GamingContainer>
-          <SlideBar />
-          <GamingContent>{this.renderAllGamingVideos()}</GamingContent>
-        </GamingContainer>
-      </>
+      <ThemeContext.Consumer>
+        {value => {
+          const {isDarkTheme} = value
+          return (
+            <>
+              <Header />
+              <GamingContainer>
+                <SlideBar />
+                <GamingContent theme={isDarkTheme} data-testid="gaming">
+                  {this.renderAllGamingVideos()}
+                </GamingContent>
+              </GamingContainer>
+            </>
+          )
+        }}
+      </ThemeContext.Consumer>
     )
   }
 }

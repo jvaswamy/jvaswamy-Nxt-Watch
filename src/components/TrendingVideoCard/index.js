@@ -2,6 +2,7 @@ import {formatDistanceToNow} from 'date-fns'
 import {Link} from 'react-router-dom'
 import {BsDot} from 'react-icons/bs'
 import '../Home/index.css'
+import ThemeContext from '../../context/ThemeContext'
 import {
   VideoItem,
   VideothumbnailImg,
@@ -11,6 +12,8 @@ import {
   VideoContentCart1,
   VideoTitle,
   VideoText,
+  VideoContent2,
+  DotContainer,
 } from './styledComponents'
 
 const HomeVideoCard = probs => {
@@ -32,28 +35,38 @@ const HomeVideoCard = probs => {
   }
 
   return (
-    <Link to={`videos/${id}`} className="link-item">
-      <VideoItem>
-        <VideothumbnailImg src={thumbnailUrl} alt="video thumbnail" />
-        <VideoContentContainer>
-          <VideoProfileImg src={profileImageUrl} alt="channel logo" />
-          <VideoContentCart>
-            <VideoTitle>{title}</VideoTitle>
+    <ThemeContext.Consumer>
+      {value => {
+        const {isDarkTheme} = value
+        return (
+          <Link to={`videos/${id}`} className="link-item">
+            <VideoItem>
+              <VideothumbnailImg src={thumbnailUrl} alt="video thumbnail" />
+              <VideoContentContainer>
+                <VideoProfileImg src={profileImageUrl} alt="channel logo" />
+                <VideoContentCart>
+                  <VideoTitle theme={isDarkTheme}>{title}</VideoTitle>
 
-            <VideoContentCart1>
-              <VideoText>
-                {name}
-                <BsDot />
-              </VideoText>
-
-              <VideoText>{viewCount} Views</VideoText>
-              <BsDot />
-              <VideoText>{postedAt} ago</VideoText>
-            </VideoContentCart1>
-          </VideoContentCart>
-        </VideoContentContainer>
-      </VideoItem>
-    </Link>
+                  <VideoContentCart1 theme={isDarkTheme}>
+                    <VideoText>
+                      {name}
+                      <DotContainer>
+                        <BsDot />
+                      </DotContainer>
+                    </VideoText>
+                    <VideoContent2 theme={isDarkTheme}>
+                      <VideoText>{viewCount} Views</VideoText>
+                      <BsDot />
+                      <VideoText>{postedAt} ago</VideoText>
+                    </VideoContent2>
+                  </VideoContentCart1>
+                </VideoContentCart>
+              </VideoContentContainer>
+            </VideoItem>
+          </Link>
+        )
+      }}
+    </ThemeContext.Consumer>
   )
 }
 export default HomeVideoCard

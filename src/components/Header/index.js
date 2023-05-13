@@ -46,8 +46,8 @@ class Header extends Component {
             ? 'https://assets.ccbp.in/frontend/react-js/nxt-watch-logo-dark-theme-img.png'
             : 'https://assets.ccbp.in/frontend/react-js/nxt-watch-logo-light-theme-img.png'
 
-          const theme = isDarkTheme ? '#0f0f0f' : '#ffffff'
-          const color = isDarkTheme ? '#ffffff' : '#0f0f0f'
+          const theme = isDarkTheme ? '#181818' : '#ffffff'
+          const color = isDarkTheme ? '#ffffff' : '#181818'
 
           return (
             <NavHeader theme={theme}>
