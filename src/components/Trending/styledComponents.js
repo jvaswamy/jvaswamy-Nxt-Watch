@@ -11,7 +11,7 @@ export const TrendingContent = styled.div`
   background-color: ${props => (props.theme === true ? '#0f0f0f' : '#f9f9f9')};
 `
 export const LoaderContainer = styled.div`
-  height: 50vh;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -43,8 +43,6 @@ export const TrendingVideoList = styled.ul`
   margin-top: 25px;
   display: flex;
   flex-wrap: wrap;
-
-  //   justify-content: center;
 `
 // failure View container
 

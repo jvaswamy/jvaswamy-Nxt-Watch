@@ -56,7 +56,6 @@ class VideoItemDetails extends Component {
     videoDetails: {},
     isLike: false,
     isDisLike: false,
-    // isSave: false,
   }
 
   componentDidMount() {
@@ -133,14 +132,6 @@ class VideoItemDetails extends Component {
   onClickSave = () => {
     this.setState(preState => ({isSave: !preState.isSave}))
   }
-  // <SaveItemContext.Consumer>
-  //   {value => {
-  //     const {addVideoItem} = value
-  //     const {videoDetails} = this.state
-  //     addVideoItem(videoDetails)
-
-  //   }}
-  // </SaveItemContext.Consumer>
 
   renderFailureView = () => (
     <ThemeContext.Consumer>
@@ -157,7 +148,7 @@ class VideoItemDetails extends Component {
               Oops! Something Went Wrong
             </FailureTitle>
             <FailureDescription theme={isDarkTheme}>
-              We are having some trouble to complete your request.Please try
+              We are having some trouble to complete your request. Please try
               again.
             </FailureDescription>
             <RetryButton type="button" onClick={this.onRetry}>
@@ -195,7 +186,7 @@ class VideoItemDetails extends Component {
           const {isDarkTheme} = value
           return (
             <VideoItemResponseContainer>
-              <ReactPlayer url={videoUrl} width="100%" />
+              <ReactPlayer url={videoUrl} width="100%" controls />
               <VideoItemContentContainer>
                 <VideoItemDescription theme={isDarkTheme}>
                   {title}
@@ -225,11 +216,12 @@ class VideoItemDetails extends Component {
                     </DisLikeButton>
                     <SaveItemContext.Consumer>
                       {value1 => {
-                        const {addVideoItem, saveVideoList} = value1
+                        const {addVideoItem, saveVideoList, isSave} = value1
                         const findVideo = saveVideoList.find(
                           eachItem => eachItem.id === id,
                         )
                         const isActive = findVideo !== undefined
+                        const showText = isSave === true ? 'Saved' : 'save'
                         return (
                           <SaveButton
                             type="button"
@@ -237,7 +229,7 @@ class VideoItemDetails extends Component {
                             isSave={isActive}
                           >
                             <BiListPlus size={25} />
-                            <Text>Save</Text>
+                            <Text>{showText}</Text>
                           </SaveButton>
                         )
                       }}

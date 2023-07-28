@@ -42,7 +42,7 @@ const apiStatusConstant = {
   failure: 'FAILURE',
   inProgress: 'IN_PROGRESS',
 }
-console.log(apiStatusConstant)
+
 class Home extends Component {
   state = {
     videosList: [],
@@ -118,7 +118,7 @@ class Home extends Component {
               Oops! Something Went Wrong
             </FailureTitle>
             <FailureDescription theme={isDarkTheme}>
-              We are having some trouble to complete your request.Please try
+              We are having some trouble to complete your request. Please try
               again.
             </FailureDescription>
             <RetryButton type="button" onClick={this.onRetry}>
@@ -205,15 +205,15 @@ class Home extends Component {
           return (
             <>
               <Header />
-              <HomeContainer data-testid="home">
+              <HomeContainer>
                 <SlideBar />
-                <HomeContentContainer theme={isDarkTheme}>
+                <HomeContentContainer theme={isDarkTheme} data-testid="home">
                   {isShowBanner && (
                     <BannerSection data-testid="banner">
                       <BannerContentContainer>
                         <BannerImg
                           src="https://assets.ccbp.in/frontend/react-js/nxt-watch-logo-light-theme-img.png"
-                          alt="website logo"
+                          alt="nxt watch logo"
                         />
                         <BannerDescription>
                           Buy Nxt Watch Premium prepaid plans with UPI

@@ -11,7 +11,7 @@ export const GamingContent = styled.div`
   flex-grow: 1;
 `
 export const LoaderContainer = styled.div`
-  height: 50vh;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;

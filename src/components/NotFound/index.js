@@ -26,7 +26,7 @@ const NotFound = () => (
               <NotFoundImg src={showImage} alt="not found" />
               <NotFoundTitle theme={isDarkTheme}>Page Not Found</NotFoundTitle>
               <NotFoundDescription theme={isDarkTheme}>
-                We are sorry,the page you requested could not be found.
+                we are sorry, the page you requested could not be found.
               </NotFoundDescription>
             </NotFoundContentContainer>
           </NotFounndContainer>

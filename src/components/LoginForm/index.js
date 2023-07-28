@@ -118,7 +118,7 @@ class LoginForm extends Component {
           return (
             <LoginFormContainer outline={isDarkTheme}>
               <FormContainer onSubmit={this.submitForm} bgColor={isDarkTheme}>
-                <WebsiteImage src={websiteLogoTheme} alt="website log" />
+                <WebsiteImage src={websiteLogoTheme} alt="website logo" />
                 <InputContainer>
                   {this.renderInputField(isDarkTheme)}
                 </InputContainer>

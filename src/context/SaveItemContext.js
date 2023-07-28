@@ -3,7 +3,7 @@ import React from 'react'
 const SaveItemContext = React.createContext({
   saveVideoList: [],
   addVideoItem: () => {},
-  removeVideoItem: () => {},
+  isSave: false,
 })
 
 export default SaveItemContext

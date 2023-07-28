@@ -12,11 +12,28 @@ import SaveItemContext from './context/SaveItemContext'
 import NotFound from './components/NotFound'
 import './App.css'
 
+const activeItemConstants = {
+  initial: 'INITIAL',
+  home: 'HOME',
+  trending: 'TRENDING',
+  gaming: 'GAMING',
+  saveItemVideo: 'SAVEITEM',
+}
+
 class App extends Component {
-  state = {isDarkTheme: false, saveVideoList: []}
+  state = {
+    isDarkTheme: false,
+    saveVideoList: [],
+    activeStatus: activeItemConstants.initial,
+    isSave: false,
+  }
 
   toggleTheme = () => {
     this.setState(preState => ({isDarkTheme: !preState.isDarkTheme}))
+  }
+
+  onChangeActive = status => {
+    this.setState({activeStatus: status})
   }
 
   addVideoItem = videoItem => {
@@ -24,6 +41,7 @@ class App extends Component {
     const findVideo = saveVideoList.find(
       eachItem => eachItem.id === videoItem.id,
     )
+    this.setState(preState => ({isSave: !preState.isSave}))
     if (findVideo !== undefined) {
       const filterVideos = saveVideoList.filter(
         eachItem => eachItem.id !== videoItem.id,
@@ -37,19 +55,21 @@ class App extends Component {
   }
 
   render() {
-    const {isDarkTheme, saveVideoList} = this.state
-    console.log(saveVideoList)
+    const {isDarkTheme, saveVideoList, activeStatus, isSave} = this.state
     return (
       <SaveItemContext.Provider
         value={{
           saveVideoList,
+          isSave,
           addVideoItem: this.addVideoItem,
         }}
       >
         <ThemeContext.Provider
           value={{
             isDarkTheme,
+            activeStatus,
             toggleTheme: this.toggleTheme,
+            onChangeActive: this.onChangeActive,
           }}
         >
           <Switch>

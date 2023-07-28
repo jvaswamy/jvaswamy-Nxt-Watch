@@ -13,7 +13,7 @@ export const HomeContentContainer = styled.div`
   @media screen and (min-width: 768px) {
     // padding: 20px;
   }
-  background-color: ${props => (props.theme === true ? '#0f0f0f' : '#f9f9f9')};
+  background-color: ${props => (props.theme === true ? '#181818' : '#f9f9f9')};
 `
 
 export const LoaderContainer = styled.div`

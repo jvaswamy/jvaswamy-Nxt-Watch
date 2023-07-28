@@ -1,11 +1,17 @@
 import styled from 'styled-components'
 
 export const NavHeader = styled.nav`
-  padding-bottom: 24px;
-  padding-top: 24px;
+  //   padding-bottom: 0px;
+  //   padding-top: 0px;
   display: flex;
+  height: 12vh;
   justify-content: center;
+  align-items: center;
   background-color: ${props => props.theme};
+  //   @media screen and (max-width: 767px) {
+  position: sticky;
+  top: 0;
+  //   }
 `
 export const NavContent = styled.div`
   width: 90%;

@@ -59,6 +59,7 @@ export const ShowPasswordContainer = styled.div`
   display: flex;
   align-items: center;
   align-self: flex-start;
+  margin-top: 12px;
 `
 export const CheckBox = styled.input`
   margin: 0px;
@@ -66,7 +67,7 @@ export const CheckBox = styled.input`
   height: 15px;
   width: 15px;
 `
-export const CheckBoxText = styled.p`
+export const CheckBoxText = styled.label`
   font-family: 'Roboto';
   color: ${props => (props.outline ? '#ffffff' : '#000000')};
 `

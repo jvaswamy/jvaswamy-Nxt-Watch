@@ -44,7 +44,9 @@ export const ItemViewsDetailsContainer = styled.div`
   color: ${props => (props.theme === true ? '#94a3b8' : '#7e858e')};
 `
 export const ItemViews = styled.p``
-export const ItemTime = styled.p``
+export const ItemTime = styled.p`
+  font-family: 'Roboto';
+`
 
 export const ItemLikeAndSaveContainer = styled.div`
   display: flex;
