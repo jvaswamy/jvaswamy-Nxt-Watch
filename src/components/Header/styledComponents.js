@@ -4,6 +4,7 @@ export const NavHeader = styled.nav`
   //   padding-bottom: 0px;
   //   padding-top: 0px;
   display: flex;
+  flex-direction: column;
   height: 12vh;
   justify-content: center;
   align-items: center;
@@ -37,6 +38,12 @@ export const NavItems = styled.div`
   }
 `
 export const LogOutBtn = styled.button`
+  background-color: transparent;
+  cursor: pointer;
+  outline: none;
+  border: none;
+`
+export const HumBtn = styled.button`
   background-color: transparent;
   cursor: pointer;
   outline: none;
@@ -127,4 +134,25 @@ export const DestopButton = styled.button`
   font-weight: bold;
   outline: none;
   padding: 8px 12px 8px 12px;
+`
+// Mobile Humbargar section
+export const HumContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  background-color: ${props => props.theme};
+  position: sticky;
+  top: 12vh;
+`
+export const HumListContainer = styled.ul`
+  width: 90%;
+  list-style-type: none;
+  padding-left: 0px;
+  margin: 0px;
+`
+
+export const HumItem = styled.li`
+  margin-bottom: 8px;
+  font-weight: 600;
+  font-family: 'Roboto';
+  color: ${props => props.color};
 `

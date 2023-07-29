@@ -6,7 +6,7 @@ export const LoginFormContainer = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: ${props => (props.outline ? '#0f0f0f' : '#f9f9f9')};
+  background-color: ${props => (props.outline ? '#0f0f0f' : '#f0f5f1')};
 `
 
 export const FormContainer = styled.form`
