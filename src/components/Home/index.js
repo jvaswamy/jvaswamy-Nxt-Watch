@@ -4,11 +4,11 @@ import Cookies from 'js-cookie'
 import Loader from 'react-loader-spinner'
 import {BiSearch} from 'react-icons/bi'
 import {AiOutlineClose} from 'react-icons/ai'
-import HomeVideoCard from '../HomeVideoCard'
-import ThemeContext from '../../context/ThemeContext'
-
+// eslint-disable-next-line import/no-cycle
 import Header from '../Header'
+import HomeVideoCard from '../HomeVideoCard'
 import SlideBar from '../SlideBar'
+import ThemeContext from '../../context/ThemeContext'
 
 import {
   HomeContainer,
@@ -194,6 +194,8 @@ class Home extends Component {
         return null
     }
   }
+
+  headerView = () => {}
 
   render() {
     const {searchInput, isShowBanner} = this.state

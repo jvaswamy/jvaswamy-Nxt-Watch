@@ -10,6 +10,7 @@ export const GamingContent = styled.div`
   min-height: 100vh;
   flex-grow: 1;
 `
+
 export const LoaderContainer = styled.div`
   height: 100vh;
   display: flex;
